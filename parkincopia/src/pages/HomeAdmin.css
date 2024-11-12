@@ -1,0 +1,173 @@
+.homeAdmin {
+    display: flex;
+    flex-direction: column;
+    width: 99vw;
+    height: 900vh;
+    padding: 20px;
+    position: relative;
+    background-color: #edf2fb;
+    overflow: hidden;
+}
+
+.containerHomeAdmin {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.userList {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: rgb(0, 0, 0);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    width: 150px;
+}
+
+
+.userList .list {
+    padding: 8px 12px 8px 15px;
+    cursor: pointer;
+    background-color: #000000;
+    color: #fff;
+    border-bottom: 2px solid #000000;
+}
+
+.userList .list:hover {
+    background-color: #444444;
+}
+
+
+.userList .list:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.userList .list:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.inputs-container {
+    position: absolute;
+    top: 0.5%;
+    left: 70%;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+.cardHomeAdmin {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 10px;
+    width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    align-items: center;
+}
+
+.cardHomeAdmin .text-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.cardHomeAdmin h2,
+.cardHomeAdmin p {
+    margin: 10px 0;
+    text-align: left;
+    padding: 5px;
+}
+
+.cardHomeAdmin p {
+    font-size: 20px;
+}
+
+.cardHomeAdmin img {
+    object-fit: cover;
+    border-radius: 5px;
+    margin-left: 55%;
+    width: 150px;
+    height: 150px;
+    background-color: #000000;
+}
+
+.registerUser-box {
+    position: fixed;
+    /* Hace que el div esté fijado en la pantalla */
+    top: 50%;
+    /* Centrado verticalmente */
+    left: 50%;
+    /* Centrado horizontalmente */
+    transform: translate(-50%, -50%);
+    /* Ajusta el div al centro */
+    z-index: 1000;
+    /* Asegura que esté por encima de otros elementos */
+    background-color: white;
+    /* Fondo blanco para visibilidad */
+    border: 1px solid #ccc;
+    /* Borde opcional */
+    padding: 20px;
+    /* Espaciado interno */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    /* Sombra para destacarlo */
+    display: block;
+    /* Mostrar el div */
+    width: 30%;
+}
+.formRegisterUser {
+    width: 100%;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.registerUser-box .input {
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    gap: 40px;
+    
+}
+
+.formRegisterUser .button:hover{
+    background-color: #444444;
+}
+
+.exit{
+    position: absolute;
+    top: 2.5%;
+    right: 2.5%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 19px;
+    cursor: pointer;
+}
