@@ -58,18 +58,22 @@ function Login() {
     }
 
     return (
-            <div className="container">
-                <div className="heading">Sing In</div>
-                <div action= "" className="form">
-                    <input required="" className="input" type="email" name="email" id="email" placeholder="E-mail" onChange={(e) => user.email = e.target.value}></input> 
-                    <input required="" className="input" type="password" name="password" id="password" placeholder="Password" onChange={(e) => user.password = e.target.value}></input>
-                            <span className="forgot-password"><a href="">Forgot Password ?</a></span>
-                            <input className="login-button" type="submit" value="Sing In" onClick={handlelogin}></input>
-                            <div className="login-error" hidden={encontrado} >{!encontrado && "User not found"}
-                                <div className="login-error-arrow" onClick={() => setEncontrado(true)}>X</div>
-                            </div>
-                </div>
+        <div className="login">
+        <p>Parking U</p>
+        <div className="container">
+            <div className="heading">Sing In</div>
+            <div action= "" className="form">
+                <input required="" className="input" type="email" name="email" id="email" placeholder="E-mail" onChange={(e) => user.email = e.target.value}></input> 
+                <input required="" className="input" type="password" name="password" id="password" placeholder="Password" onChange={(e) => user.password = e.target.value}></input>
+                        <span className="forgot-password"><a href="">Forgot Password ?</a></span>
+                        <input className="login-button" type="submit" value="Sing In" onClick={handlelogin}></input>
+                        <div className="login-error" hidden={encontrado} >{!encontrado && "User not found"}
+                            <div className="login-error-arrow" onClick={() => setEncontrado(true)}>X</div>
+                        </div>
             </div>
+        </div>
+        <img className="car" src="./src/utils/images/car.svg" alt="" />
+        </div>
         
     );
 }

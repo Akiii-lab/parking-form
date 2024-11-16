@@ -106,7 +106,7 @@
 /* Menu User */
 
 /* Register User */
-.registerUser-box {
+.registerUser-box, .deleteVehicle-box , .deleteUser-box {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -128,7 +128,7 @@
     flex-direction: column;
     align-items: center;
 }
-.registerUser-box .input {
+.registerUser-box .input  {
     width: 50%;
     padding: 10px;
     margin-bottom: 10px;
@@ -193,7 +193,7 @@
 
 /*listar Usuarios*/
 
-.listUser-box {
+.listUser-box , .listVehicle-box {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -207,7 +207,7 @@
     display: block;
 }
 
-.formListUser {
+.formListUser , .formListVehicle{
     margin-bottom: 5px;
     display: flex;
     flex-direction: column;
@@ -236,7 +236,7 @@
     background-color: #f9f9f9;
 }
 
-.formListUser .list-button{
+.formListUser .list-button {
     background-color: #000000;
     color: #ffff;
     border: 5px solid #000000;
@@ -247,7 +247,7 @@
 
 /* Modificar usuario */
 
-.modifyUser-box {
+.modifyUser-box , .modifyVehicle-box {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -279,7 +279,7 @@
     
 }
 
-.formModifyUser .button{
+.formModifyUser .button, .formModifyVehicle .button{
     margin-top: 4%;
     background-color: #000000;
     border: 7px solid #000000;
@@ -404,6 +404,13 @@
     
 }
 
+.deleteVehicle-box .button , .deleteUser-box .button{
+    background-color: #444444;
+}
+
+.formListVehicle .list-button{
+    background-color: #444444;
+}
 
 /* Infraction */
 /* Menu Infraction */

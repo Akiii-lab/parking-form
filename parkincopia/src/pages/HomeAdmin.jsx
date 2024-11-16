@@ -10,32 +10,38 @@ export function HomeAdmin() {
     //General functions
     const [encontrado, setEncontrado] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
-    const [open, setOpen] = useState(false);
     const [selectionAction, setSelectionAction] = useState("");
 
     //User
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [users, setUsers] = useState([]);
-    const [user, setUser] = useState([{ documento:"", firstName: "", lastname: "", code: "", email: "", role: "",password: "",  vehiculos: [{ plate: "",brand:"",color:""}] }]);
+    const [user, setUser] = useState([{ documento:"", firstName: "", lastname: "", code: "", email: "", role: "",password: "",  vehiculos: [] }]);
     const [isUserFilter, setIsUserFilter] = useState([]);
     const [repassword, setRepassword] = useState("");
-
-    //Modify user
-    const [modUser, setModUser] = useState([]);
+    const [codeAux, setCodeAux] = useState();
+    //para modificar el usuario
+    const [documentTextChange, setDocumentTextChange] = useState("");
+    const [firstNameTextChange, setFirstNameTextChange] = useState("");
+    const [lastNameTextChange, setLastNameTextChange] = useState("");
+    const [codeTextChange, setCodeTextChange] = useState("");
+    const [emailTextChange, setEmailTextChange] = useState("");
+    const [modifyUserBoolean, setmodifyUserBoolean] = useState(false);
 
     //Vehicle
     const [vehicleMenu, setVehicleMenu] = useState(false);
-    const [vehicles, setVehicles] = useState([]);
-    const [vehiculo, setVehiculo] = useState({ plate: "",brand:"",color:"", ownershipCard:"", codeOwner: "" });
-    const [userVehiculos, setUserVehiculos] = useState({ plate: "",brand:"",color:"", ownershipCard:"" });
+    const [ownerCardAux, setOwnerCardAux] = useState();
+    const [vehiculo, setVehiculo] = useState();
+    const [userVehiculos, setUserVehiculos] = useState();
+    const [plateAux, setPlateAux] = useState();
+    //para modificar el vehiculo
+    const [plateTextChange, setPlateTextChange] = useState("");
+    const [brandTextChange, setBrandTextChange] = useState("");
+    const [colorTextChange, setColorTextChange] = useState("");
+    const [ownershipCardTextChange, setOwnershipCardTextChange] = useState("");
+    const [modifyVehicleBoolean, setModifyVehicleBoolean] = useState(false);
 
     //Infraction
     const [infractionMenu, setInfractionMenu] = useState(false);
-
-    //Report
-    const [reportMenu, setReportMenu] = useState(false);
-
-    
 
     useEffect(() => {
         document.title = "HomeAdmin";
@@ -45,6 +51,10 @@ export function HomeAdmin() {
             setUsers(JSON.parse(storedUsers));
         }
     }, []);
+
+    useEffect(() => {
+        setUserVehiculos(vehiculo);
+    }, [vehiculo]);
 
 
     const handleMouseEnter = (menu) => {
@@ -106,21 +116,6 @@ export function HomeAdmin() {
         document.getElementById("password").value = "";
         document.getElementById("confirmPassword").value = "";
     }
-
-    // Función para agregar un vehículo al array `vehiculos`
-    const addVehiculo = () => {
-        setVehicles((prevVehiculos) => [...prevVehiculos, vehiculo]);
-        setVehiculo({ plate: "",brand:"",color:"", ownershipCard:"", codeOwner: "" }); // Reinicia el estado `vehiculo` para un nuevo ingreso
-    };
-
-    // Función para guardar `vehiculos` en `user`
-    const saveVehiculosInUser = () => {
-        setUser((prevUser) => ({
-            ...prevUser,
-            vehiculos: vehiculos, // Asigna el array `vehiculos` al objeto `user`
-        }));
-    };
-
     //Usuarios
     const handleInputChange = (e) => {
         const { id, value } = e.target;
@@ -129,7 +124,6 @@ export function HomeAdmin() {
             [id]: value,
         }));
     };
-
     const handleInputChangeVehiculo = (e) => {
         const { id, value } = e.target;
         setVehiculo((prevVehiculo) => ({
@@ -148,13 +142,52 @@ export function HomeAdmin() {
         email: user.email,
         role: user.role,
         password: user.password,
-        vehiculos: [{ plate: "",brand:"",color:"",ownershipCard:""}]
+        vehiculos: []
     };
 
     const saveUserInLocalStorage = (updatedUsers) => {
         setUsers(updatedUsers);
         localStorage.setItem("users", JSON.stringify(updatedUsers));
         console.log(updatedUsers);
+    };
+
+    const deleteUser = () => {
+        const updatedUsers = users.filter((existingUser) => existingUser.code !== codeAux);
+        saveUserInLocalStorage(updatedUsers);
+        setErrorMessage("Usuario eliminado!");
+    };
+
+    const searchUser = () => {
+        const foundedUser = users.find(existingUser => existingUser.code === codeAux);
+        if (foundedUser) {
+            setmodifyUserBoolean(true);
+            setCodeTextChange(foundedUser.code);
+            setDocumentTextChange(foundedUser.document);
+            setFirstNameTextChange(foundedUser.firstName);
+            setLastNameTextChange(foundedUser.lastName);
+            setEmailTextChange(foundedUser.email);
+            return;
+        }else{
+            setErrorMessage("Codigo de usuario no encontrado");
+        }
+    }
+    const updateUser = () => {
+        const updatedUsers = users.map((existingUser) => {
+            if (existingUser.code === codeAux) {
+                return {
+                    ...existingUser,
+                    document: documentTextChange,
+                    firstName: firstNameTextChange,
+                    lastName: lastNameTextChange,
+                    code: codeTextChange,
+                    email: emailTextChange,
+                };
+            }
+            return existingUser;
+        });
+        setmodifyUserBoolean(false);
+        saveUserInLocalStorage(updatedUsers);
+        setErrorMessage("Usuario actualizado!");
     };
     
     const CheckUser = () => {
@@ -183,54 +216,26 @@ export function HomeAdmin() {
             }
         }
     };
-
     const userFilter = () =>{
         const usersFiltered = users.filter(user => user.role === "user");
         setIsUserFilter(usersFiltered);
     }
 
-    //Buscar usuario
-
-
- 
-   const addVehicleToUser = () => {
-    const codeUser = user.code;
-    const userIndex = users.findIndex(existingUser => existingUser.code === codeUser);
-    
-    if (userIndex === -1) {
-        setErrorMessage("Código de usuario no encontrado");
-        setEncontrado(false);
-        return;
+    const vehiculoFilter = () => {
+        const usersFiltered = users.filter(user => user.vehiculos.length > 0);
+        setIsUserFilter(usersFiltered);
     }
-    
-    const updatedUsers = users.map((existingUser, index) => {
-        if (index === userIndex) {
-            return {
-                ...existingUser,
-                vehiculos: [...existingUser.vehiculos, vehiculo]
-            };
-        }
-        return existingUser;
-    });
-
-    saveUserInLocalStorage(updatedUsers);
-    setErrorMessage("Vehículo registrado!");
-    };
 
     const vehiculoAñadido = () => {
-        
-        console.log(vehiculo);
-        setUserVehiculos();
-        console.log("aux: ");
-        console.log(userVehiculos, "valore s : ", plate, brand, color);
-        let codeU = document.getElementById("codeOwner").value;
-        const userIndex = users.findIndex(existingUser => existingUser.code === codeU);
-        
+        if(vehiculo === undefined){
+            setErrorMessage('Error al registrar vehiculo, haga click en "Registrar" nuevamente ');
+            return;
+        }
+        const userIndex = users.findIndex(existingUser => existingUser.code === ownerCardAux);
         if (userIndex === -1) {
             setErrorMessage("Código de usuario no encontrado");
             return;
         }
-        
         const updatedUsers = users.map((existingUser, index) => {
             if (index === userIndex) {
                 return {
@@ -245,13 +250,90 @@ export function HomeAdmin() {
         
         saveUserInLocalStorage(updatedUsers);
         setErrorMessage("Vehiculo registrado!");
-
     }
 
+    const searchVehicle = () => {
+        const userIndex = users.findIndex(existingUser => existingUser.code === ownerCardAux);
+        if (userIndex === -1) {
+            setErrorMessage("Código de usuario no encontrado");
+            return;
+        }
+        const foundVehiculo = users[userIndex].vehiculos.find(vehiculo => vehiculo.plate === plateAux);
+        if (foundVehiculo) {
+            setModifyVehicleBoolean(true);
+            setPlateTextChange(foundVehiculo.plate);
+            setOwnershipCardTextChange(foundVehiculo.ownershipCard);
+            setColorTextChange(foundVehiculo.color);
+            setBrandTextChange(foundVehiculo.brand);
+            return;
+        }else{
+            setErrorMessage("Placa de vehiculo no encontrada");
+        }
+    }
+    const modifyVehicle = () => {
+        const userIndex = users.findIndex(existingUser => existingUser.code === ownerCardAux);
+        const vehiculoIndex = users[userIndex].vehiculos.findIndex(vehiculo => vehiculo.plate === plateAux);
+        if (userIndex === -1) {
+            setErrorMessage("Código de usuario no encontrado");
+            return;
+        }
+        if (vehiculoIndex === -1) {
+            setErrorMessage("Placa de vehiculo no encontrada");
+            return;
+        }
+        const updatedUsers = users.map((existingUser, index) => {
+            if (index === userIndex) {
+                return {
+                    ...existingUser,
+                    vehiculos: existingUser.vehiculos.map((vehiculo) => {
+                        if (vehiculo.plate === plateAux) {
+                            return {
+                                ...vehiculo,
+                                plate: plateTextChange,
+                                ownershipCard: ownershipCardTextChange,
+                                color: colorTextChange,
+                                brand: brandTextChange,
+                            };
+                        }
+                        return vehiculo;
+                    })
+                };
+            }
+            return existingUser;
+        });
+        setModifyVehicleBoolean(false);
+        saveUserInLocalStorage(updatedUsers);
+        setErrorMessage("Vehiculo actualizado!");
+    }
+    const deleteVehiculo = () => {
+        const userIndex = users.findIndex(existingUser => existingUser.code === ownerCardAux);
+        const vehiculoIndex = users[userIndex].vehiculos.findIndex(vehiculo => vehiculo.plate === plateAux);
+        if (userIndex === -1) {
+            setErrorMessage("Código de usuario no encontrado");
+            return;
+        }
+        if (vehiculoIndex === -1) {
+            setErrorMessage("Placa de vehiculo no encontrada");
+            return;
+        }
+        
+        const updatedUsers = users.map((existingUser, index) => {
+            if (index === userIndex) {
+                return {
+                    ...existingUser,
+                    vehiculos: existingUser.vehiculos.filter((vehiculo) => vehiculo.plate !== plateAux)
+                };
+            }
+            return existingUser;
+        });
+        saveUserInLocalStorage(updatedUsers);
+        setErrorMessage("Vehiculo eliminado!");
+    }
     
 
 
     return (
+        console.log(users),
         <div className="homeAdmin">
             <h1>HomeAdmin</h1>
             <div className="navigator-bar">
@@ -351,12 +433,15 @@ export function HomeAdmin() {
                 <div className="modifyUser-box">
                     <h2>Modificar Usuario</h2>
                     <div className="formModifyUser">
-                        <input className="input" type="text" id="document" placeholder="Documento"  />
-                        <input className="input" type="text" id="firstName" placeholder="Primer nombre"  />
-                        <input className="input" type="text" id="lastName" placeholder="Apellido"/>
-                        <input className="input" type="text" id="code" placeholder="Codigo"  />
-                        <input className="input" type="email" id="email" placeholder="Correo Electronico"  />
-                        
+                        <input className="input" type="text" id="codeaux" placeholder="Ingrese su codigo" onChange={(e) => setCodeAux(e.target.value)} hidden={modifyUserBoolean} />
+                        <button className="button" id = "modify-pre-user-buttom" onClick={() => (setmodifyUserBoolean(false),searchUser())} hidden={modifyUserBoolean}>buscar</button>
+                        <input className="input" type="text" id="document" placeholder="Documento" value={documentTextChange} onChange={(e) => setDocumentTextChange(e.target.value)} hidden = {!modifyUserBoolean}/>
+                        <input className="input" type="text" id="firstName" placeholder="Primer nombre" value={firstNameTextChange} onChange={(e) => setFirstNameTextChange(e.target.value)} hidden = {!modifyUserBoolean}/>
+                        <input className="input" type="text" id="lastName" placeholder="Apellido" value={lastNameTextChange} onChange={(e) => setLastNameTextChange(e.target.value)} hidden = {!modifyUserBoolean}/>
+                        <input className="input" type="text" id="code" placeholder="Codigo" value={codeTextChange} onChange={(e) => setCodeTextChange(e.target.value)} hidden = {!modifyUserBoolean}/>
+                        <input className="input" type="email" id="email" placeholder="Correo Electronico" value={emailTextChange} onChange={(e) => setEmailTextChange(e.target.value)} hidden = {!modifyUserBoolean}/>
+                        <button className="button" id = "modify-user-buttom" onClick={updateUser} hidden = {!modifyUserBoolean}>Modificar</button>
+                        {/* limpiar code aux depues de modificar */}
                     </div>
                     {errorMessage &&
                             <div className="vehicle-error"> <p>{errorMessage}</p>
@@ -367,6 +452,18 @@ export function HomeAdmin() {
                     </div>
 
                     }
+                {/* Eliminar Usuario */}
+                {selectionAction === "deleteUser" &&
+                <div className="deleteUser-box">
+                    <h2>Eliminar Usuario</h2>
+                    <div className="formDeleteUser"></div>
+                        <input className="input" type="text" id="code" placeholder="Codigo" onChange={((e) => setCodeAux(e.target.value))} />
+                        <button className="button" onClick={deleteUser}>Eliminar</button>
+                        {/* poner error */}
+                    <div/>
+                    <img className="exit" onClick={handleCleanClick} src="./src/utils/images/x.png" alt="exit" />
+                </div>}
+
             {/* Register vehicle */}
             {selectionAction === "registerVehicle" &&
                 <div className="registerVehicle-box">
@@ -376,7 +473,7 @@ export function HomeAdmin() {
                         <input className="input" id="brand" placeholder="Marca" onChange={handleInputChangeVehiculo}></input>
                         <input className="input" id="color" placeholder="Color" onChange={handleInputChangeVehiculo}></input>
                         <input className="input" id="ownershipCard" placeholder="Tarjeta propiedad" onChange={handleInputChangeVehiculo}></input>
-                        <input className="input" id="codeOwner" placeholder="Codigo" onChange={handleInputChangeVehiculo}></input> 
+                        <input className="input" id="codeOwner" placeholder="Codigo" onChange={((e) => setOwnerCardAux(e.target.value))}></input> 
                         <input className="button" type="button" id="register-buttom" value="Registrar" onClick={vehiculoAñadido} />
                     </div>
                 {errorMessage &&
@@ -385,10 +482,70 @@ export function HomeAdmin() {
                             </div>}                    
                             <img className="exit" onClick={handleCleanClick} src="./src/utils/images/x.png" alt="exit" />
                 </div>
-                
-
             }
-         
+            {/* Listar vehiculos */}
+            {selectionAction === "listVehicle" &&
+                <div className="listVehicle-box">
+                    <div className="formListVehicle">
+                        <h2>Listar vehiculos</h2>
+                        <table className="vehicleTable" id= "vehicleTable" hidden={encontrado}>
+                            <thead>
+                                <tr>
+                                    <th>Placa</th>
+                                    <th>Marca</th>
+                                    <th>Color</th>
+                                    <th>Propietario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {isUserFilter.map((user, uindex) => (
+                                    user.vehiculos.map((vehiculo, vindex) => (
+                                        <tr key={`${uindex}-${vindex}`}>
+                                        <td>{vehiculo.plate}</td>
+                                        <td>{vehiculo.brand}</td>
+                                        <td>{vehiculo.color}</td>
+                                        <td>{user.code}</td>
+                                    </tr>
+                                    ))
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <input className="list-button" onClick={() => (setEncontrado(false),vehiculoFilter())} type="button" id="list-buttom" value="Listar" style={{backgroundColor: "#000000", color: "#ffff", border: "5px solid #000000", borderRadius: "5px", marginTop: "10px", cursor: "pointer", display: "block"}} />
+                    <img className="exit" onClick={handleCleanClick} src="./src/utils/images/x.png" alt="exit" />
+                </div>
+            }
+            {/* Modificar vehiculo */}
+            {selectionAction === "modifyVehicle" &&
+                <div className="modifyVehicle-box">
+                    <h2>Modificar vehiculo</h2>
+                    <div className="formModifyVehicle">
+                        <input className="input" type="text" id="codeOwneraux" placeholder="Codigo del propietario" onChange={(e) => setOwnerCardAux(e.target.value)} hidden = {modifyVehicleBoolean} />
+                        <input className="input" type="text" id="plateaux" placeholder="placa del vehiculo" onChange={(e) => setPlateAux(e.target.value)} hidden={modifyVehicleBoolean}/>
+                        <input className="button" type="button" id="modify-vehicle-buttom" value="Buscar" onClick={searchVehicle} hidden={modifyVehicleBoolean}/>
+                        <input className="input" type="text" id="plate" placeholder="Placa" value={plateTextChange} onChange={(e) => setPlateTextChange(e.target.value)} hidden = {!modifyVehicleBoolean}/>
+                        <input className="input" type="text" id="brand" placeholder="Marca" value={brandTextChange} onChange={(e) => setBrandTextChange(e.target.value)} hidden = {!modifyVehicleBoolean} />
+                        <input className="input" type="text" id="color" placeholder="Color" value={colorTextChange} onChange={(e) => setColorTextChange(e.target.value)} hidden = {!modifyVehicleBoolean} />
+                        <input className="input" type="text" id="ownershipCard" placeholder="Tarjeta propiedad"  value={ownershipCardTextChange} onChange={(e) => setOwnershipCardTextChange(e.target.value)} hidden = {!modifyVehicleBoolean}/>
+                        <input className="button" type="button" id="modify-buttom" value="Modificar" onClick={modifyVehicle} hidden = {!modifyVehicleBoolean} />
+                    </div>
+                    <img className="exit" onClick={handleCleanClick} src="./src/utils/images/x.png" alt="exit" />
+                    {/*poner el error aqui y limpiar los aux*/}
+                </div>
+            }
+            {/* Eliminar vehiculo */}
+            {selectionAction === "deleteVehicle" &&
+                <div className="deleteVehicle-box">
+                    <h2>Eliminar vehiculo</h2>
+                    <div className="formDeleteVehicle">
+                        <input className="input" type="text" id="plate" placeholder="Placa" onChange={(e) => setPlateAux(e.target.value)} />
+                        <input className="input" type="text" id="codeOwner" placeholder="Codigo" onChange={(e) => setOwnerCardAux(e.target.value)} />
+                        <input className="button" type="button" id="delete-buttom" value="Eliminar" onClick={deleteVehiculo} />
+                        {/*poner el error aqui*/}
+                    </div>
+                    <img className="exit" onClick={handleCleanClick} src="./src/utils/images/x.png" alt="exit" />
+                </div>
+            }
         </div>
 
     );
