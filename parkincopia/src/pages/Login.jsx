@@ -38,14 +38,16 @@ function Login() {
     const handlelogin = () => {
         for(let i = 0; i < users.length; i++){
             if(user.email === users[i].email && user.password === users[i].password){
-                navigate("/home");
+                if(users[i].role === "admin"){
+                    navigate("/homeAdmin");
+            } else {
+                if(users[i].role === "user"){
+                    navigate("/home");
             }
         }
-        for(let i = 0; i < admins.length; i++){
-            if(user.email === admins[i].email && user.password === admins[i].password){
-                navigate("/Soy el Admin");
-            }
         }
+    }
+        
         setEncontrado(false);
         limpiarinputs();
     };

@@ -1,0 +1,186 @@
+/* Estilos generales */
+header {
+    background-color: #000000;
+    color: white;
+    padding: 10px;
+}
+
+header h1 {
+    display: inline;
+    margin: 0;
+    font-size: 24px;
+    padding-right: 20px;
+}
+
+/* Barra de navegación */
+.navigation-bar {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.navigation-bar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    
+}
+
+.navigation-bar-list > li {
+    position: relative;
+    padding: 0px 20px;
+    cursor: pointer;
+    left: 1100px;
+    font-size: 20px;
+    transition: left 0.3s ease;
+}
+
+/* Estilos de enlace */
+.navigation-bar-list > li > p {
+    color: white;
+    text-decoration: none;
+}
+
+/* Menú desplegable */
+.navigation-bar-list li ul {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: 100%;
+    background-color: #000000;
+    list-style-type: none;
+    width: 180px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+    border-radius: 5%;
+}
+
+.navigation-bar-list li ul li {
+    padding: 10px;
+}
+
+.navigation-bar-list li ul li p {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+/* Mostrar menú desplegable al pasar el ratón */
+.navigation-bar-list li:hover ul {
+    display: block;
+}
+
+/* Estilo para los elementos del menú desplegable */
+.navigation-bar-list li ul li:hover {
+    background-color: #424242;
+    border-radius: 5%;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .navigation-bar-list {
+        flex-direction: column;
+    }
+
+    .navigation-bar-list li ul {
+        position: static;
+    }
+}
+
+/* Register */
+/* Estilos generales */
+.card-register-user {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centra el formulario */
+    background-color: #fff;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px; /* Ajusta el ancho máximo del formulario */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+    text-align: center; /* Centra los elementos de texto dentro */
+    font-family: 'Arial', sans-serif; /* Establece una fuente general */
+}
+
+.card-register-user h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Contenedor del formulario */
+.register-box-user {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Estilo para los inputs */
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+/* Estilo para el select */
+.rol {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Estilo para el botón de registrar */
+.button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para el mensaje de error o éxito */
+.message {
+    font-size: 14px;
+    color: #f44336; /* Rojo para los errores */
+}
+
+/* Imagen de cerrar el formulario */
+.exit {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    cursor: pointer;
+}
+
+/* Efecto de fadeIn para el formulario */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
